@@ -1,3 +1,4 @@
+# -*- coding: cp936 -*-
 import urllib.request
 import os
 import re
@@ -16,7 +17,7 @@ def url_open(url):
     return html
 
 
-def get_total_page(html):  # è·å–æ€»é¡µæ•°
+def get_total_page(html):  # »ñÈ¡×ÜÒ³Êı
     soup = BeautifulSoup(html, "lxml")
     first_page = soup.find('div', id="picture").find('a').get('href')
     n = re.search(r'[0-9]{1,10}', first_page)
@@ -25,14 +26,14 @@ def get_total_page(html):  # è·å–æ€»é¡µæ•°
         return number
 
 
-def get_img_urls(page):  # è·å–ç¬¬äºŒé¡µçš„æ‰€æœ‰å›¾ç‰‡åœ°å€ï¼Œè¿”å›åˆ—è¡¨
+def get_img_urls(page):  # »ñÈ¡µÚ¶şÒ³µÄËùÓĞÍ¼Æ¬µØÖ·£¬·µ»ØÁĞ±í
     img_srcs = []
     page_url = 'http://www.meizitu.com/' + '/a/' + str(page) + '.html'
     html = url_open(page_url)
     soup = BeautifulSoup(html, "lxml")
     img_div = soup.find_all('div', id="picture")
-    img_soup = BeautifulSoup(str(img_div), "lxml")  # è¿”å›çš„åˆ—è¡¨é•¿åº¦ä¸º1
-    img_result = list(img_soup.find_all('img'))  # è¿”å›çš„åˆ—è¡¨é•¿åº¦ä¸ºå›¾ç‰‡æ•°
+    img_soup = BeautifulSoup(str(img_div), "lxml")  # ·µ»ØµÄÁĞ±í³¤¶ÈÎª1
+    img_result = list(img_soup.find_all('img'))  # ·µ»ØµÄÁĞ±í³¤¶ÈÎªÍ¼Æ¬Êı
     for each in img_result:
         img_url = re.compile('http:.*\.jpg')
         m = re.search(img_url, str(each))
@@ -54,7 +55,7 @@ def download():
     url = 'http://www.meizitu.com/'
     html = url_open(url)
     total_page = get_total_page(html)
-    print('æ€»é¡µé¢ä¸º %d' % total_page)
+    print('×ÜÒ³ÃæÎª %d' % total_page)
     total_num = 0
     for page in range(0, total_page):
         img_srcs = get_img_urls(total_page-page)
@@ -65,10 +66,9 @@ def download():
                 picture = url_open(each)
                 f.write(picture)
             count += 1
-
-            print('å·²ä¸‹è½½ç¬¬ %d é¡µçš„ç¬¬ %d å¼ å›¾ç‰‡,æ–‡ä»¶åä¸º %s ' % (total_page-page, count, filename))
+            print('ÒÑÏÂÔØµÚ %d Ò³µÄµÚ %d ÕÅÍ¼Æ¬,ÎÄ¼şÃûÎª %s ' % (total_page-page, count, filename))
         total_num += count
-        print('å½“å‰ä¸€å…±ä¸‹è½½äº† %d å¼ å›¾ç‰‡' % total_num)
+        print('µ±Ç°Ò»¹²ÏÂÔØÁË %d ÕÅÍ¼Æ¬' % total_num)
         a = random.random() * 3
         time.sleep(a)
 
